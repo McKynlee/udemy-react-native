@@ -1,19 +1,31 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'INCREASE_COUNT':
+      return { ...state, totalCount: state.totalCount + 1 };
+    case 'DECREASE_COUNT':
+      return { ...state, totalCount: state.totalCount - 1 }
+    default:
+      return state;
+  }
+}
+
+
 const CounterScreen = () => {
-  const [totalCount, setTotalCount] = useState(0);
+  const [state, dispatch] = useReducer(reducer, { totalCount: 0 });
 
   return <View>
     <Button
       title='Increase'
-      onPress={() => setTotalCount(totalCount + 1)}
+      onPress={() => dispatch({ type: 'INCREASE_COUNT' })}
     />
     <Button
       title='Decrease'
-      onPress={() => setTotalCount(totalCount - 1)}
+      onPress={() => dispatch({ type: 'DECREASE_COUNT' })}
     />
-    <Text>Total Count: {totalCount}</Text>
+    <Text>Total Count: {state.totalCount}</Text>
 
   </View>
 }

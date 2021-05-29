@@ -1,21 +1,30 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
 import { View, Text, StyleSheet, Button, FlatList } from 'react-native';
 
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'SET_COLORS':
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
 const ColorScreen = () => {
-  const [colors, setColors] = useState([]);
-  console.log('colors:', colors);
+  const [state, dispatch] = useReducer(reducer, { colors: [] });
+
 
   return (
     <View>
       <Button title="Add a Color"
         onPress={() => {
           // create brand new array, take everything from original colors and add brand new one
-          setColors([...colors, randomRgb()])
+          dispatch({ type: 'SET_COLORS', payload: [...state.colors, randomRgb()] })
         }}
       />
       <FlatList
         keyExtractor={(item) => item}
-        data={colors}
+        data={state.colors}
         renderItem={({ item }) => {
           return <View style={{ height: 100, width: 100, backgroundColor: item }} />
         }}
